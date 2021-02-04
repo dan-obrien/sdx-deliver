@@ -1,34 +1,37 @@
+import json
 import logging
 from flask import request, jsonify
 from structlog import wrap_logger
 
 from app import app
 from app.deliver import deliver
+from app.output_type import OutputType
 
 logger = wrap_logger(logging.getLogger(__name__))
 
-DELIVER_NAME = 'zip'
+ZIP_FILE = 'zip'
+SUBMISSION_FILE = 'submission'
+TRANSFORMED_FILE = 'transformed'
 
 
 @app.route('/deliver/dap', methods=['POST'])
 def deliver_dap():
-    dataset = request.args.get("survey_id")
-    return process(dataset, "surveys")
+    return process(OutputType.DAP)
 
 
-@app.route('/deliver/survey', methods=['POST'])
-def deliver_survey():
-    return process("EDCSurvey", "surveys")
+@app.route('/deliver/legacy', methods=['POST'])
+def deliver_legacy():
+    return process(OutputType.LEGACY)
 
 
 @app.route('/deliver/feedback', methods=['POST'])
 def deliver_feedback():
-    return process("EDCFeedback", "feedback")
+    return process(OutputType.FEEDBACK)
 
 
 @app.route('/deliver/comments', methods=['POST'])
 def deliver_comments():
-    return process("EDCComments", "comments")
+    return process(OutputType.COMMENTS)
 
 
 @app.errorhandler(500)
@@ -43,28 +46,37 @@ def server_error(error=None):
     return resp
 
 
-def process(dataset, directory):
+def process(output_type: OutputType) -> str:
     try:
         logger.info(f"processing request")
         files = request.files
-        file_bytes = files[DELIVER_NAME].read()
-        logger.info(f"file_bytes: {file_bytes}")
-        # filename = files[DELIVER_NAME].filename
+
+        submission_bytes = b""
+        survey_dict = {}
+
+        if not output_type == OutputType.COMMENTS:
+            submission_bytes = files[SUBMISSION_FILE].read()
+            survey_dict = json.loads(submission_bytes.decode())
+
+        if output_type == OutputType.DAP or output_type == OutputType.FEEDBACK:
+            data_bytes = submission_bytes
+
+        elif output_type == OutputType.COMMENTS:
+            logger.info('Reading comments')
+            data_bytes = files[ZIP_FILE].read()
+
+        else:
+            logger.info('else')
+            data_bytes = files[TRANSFORMED_FILE].read()
+
         filename = request.args.get("filename")
         logger.info(f"filename: {filename}")
-        tx_id = request.args.get("tx_id")
-        logger.info(f"tx_id: {tx_id}")
-        description = request.args.get("description")
-        logger.info(f"description: {description}")
-        iteration = request.args.get("iteration")
-        logger.info(f"iteration: {iteration}")
-        deliver(file_bytes=file_bytes,
-                filename=filename,
-                tx_id=tx_id,
-                dataset=dataset,
-                description=description,
-                iteration=iteration,
-                directory=directory)
+
+        deliver(filename=filename,
+                data_bytes=data_bytes,
+                survey_dict=survey_dict,
+                output_type=output_type)
+
         return jsonify(success=True)
     except Exception as e:
         return server_error(e)

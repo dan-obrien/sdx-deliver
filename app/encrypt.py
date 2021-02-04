@@ -1,22 +1,21 @@
 import logging
-
-# import yaml
-# from sdc.crypto.key_store import KeyStore
-# from sdc.crypto.encrypter import encrypt
 from structlog import wrap_logger
+
+from app import gpg
 
 logger = wrap_logger(logging.getLogger(__name__))
 
-KEY_PURPOSE_SUBMISSION = 'submission'
+DAP_RECIPIENT = 'dap@ons.gov.uk'
 
 
-def encrypt_data(data: bytes) -> str:
-    # data_str = str(data)
-    # with open("./keys.yml") as file:
-    #     secrets_from_file = yaml.safe_load(file)
-    # key_store = KeyStore(secrets_from_file)
-    # encrypted_payload = encrypt(data_str, key_store, KEY_PURPOSE_SUBMISSION)
-    # logger.info("successfully encrypted payload")
-    encrypted_payload = str(data)
-    print(encrypted_payload)
-    return encrypted_payload
+def encrypt_output(data_bytes: bytes) -> str:
+
+    encrypted_data = gpg.encrypt(data_bytes, recipients=[DAP_RECIPIENT], always_trust=True)
+
+    if encrypted_data.ok:
+        logger.info("successfully encrypted output")
+    else:
+        logger.info("failed to encrypt output")
+        logger.info(encrypted_data.status)
+
+    return str(encrypted_data)
