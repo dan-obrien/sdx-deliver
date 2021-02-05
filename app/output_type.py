@@ -6,3 +6,4 @@ class OutputType(Enum):
     LEGACY = 2
     FEEDBACK = 3
     COMMENTS = 4
+    SEFT = 5

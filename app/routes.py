@@ -5,33 +5,73 @@ from structlog import wrap_logger
 
 from app import app
 from app.deliver import deliver
-from app.output_type import OutputType
+from app.meta_wrapper import MetaWrapper
 
 logger = wrap_logger(logging.getLogger(__name__))
 
 ZIP_FILE = 'zip'
 SUBMISSION_FILE = 'submission'
 TRANSFORMED_FILE = 'transformed'
+METADATA_FILE = 'metadata'
+SEFT_FILE = 'seft'
 
 
 @app.route('/deliver/dap', methods=['POST'])
 def deliver_dap():
-    return process(OutputType.DAP)
+    filename = request.args.get("filename")
+    meta = MetaWrapper(filename)
+    files = request.files
+    submission_bytes = files[SUBMISSION_FILE].read()
+    survey_dict = json.loads(submission_bytes.decode())
+    data_bytes = submission_bytes
+    meta.set_dap(survey_dict, data_bytes)
+    return process(meta, data_bytes)
 
 
 @app.route('/deliver/legacy', methods=['POST'])
 def deliver_legacy():
-    return process(OutputType.LEGACY)
+    filename = request.args.get("filename")
+    meta = MetaWrapper(filename)
+    files = request.files
+    submission_bytes = files[SUBMISSION_FILE].read()
+    survey_dict = json.loads(submission_bytes.decode())
+    data_bytes = files[TRANSFORMED_FILE].read()
+    meta.set_legacy(survey_dict, data_bytes)
+    return process(meta, data_bytes)
 
 
 @app.route('/deliver/feedback', methods=['POST'])
 def deliver_feedback():
-    return process(OutputType.FEEDBACK)
+    filename = request.args.get("filename")
+    meta = MetaWrapper(filename)
+    files = request.files
+    submission_bytes = files[SUBMISSION_FILE].read()
+    survey_dict = json.loads(submission_bytes.decode())
+    data_bytes = survey_dict
+    meta.set_feedback(survey_dict, data_bytes)
+    return process(meta, data_bytes)
 
 
 @app.route('/deliver/comments', methods=['POST'])
 def deliver_comments():
-    return process(OutputType.COMMENTS)
+    filename = request.args.get("filename")
+    meta = MetaWrapper(filename)
+    files = request.files
+    data_bytes = files[ZIP_FILE].read()
+    meta.set_comments(data_bytes)
+    return process(meta, data_bytes)
+
+
+@app.route('/deliver/seft', methods=['POST'])
+def deliver_seft():
+    filename = request.args.get("filename")
+    meta = MetaWrapper(filename)
+    files = request.files
+    meta_bytes = files[METADATA_FILE].read()
+    meta_dict = json.loads(meta_bytes.decode())
+    data_bytes = files[SEFT_FILE].read()
+    meta.set_seft(meta_dict)
+    return process(meta, data_bytes)
 
 
 @app.errorhandler(500)
@@ -46,37 +86,10 @@ def server_error(error=None):
     return resp
 
 
-def process(output_type: OutputType) -> str:
+def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
     try:
         logger.info(f"processing request")
-        files = request.files
-
-        submission_bytes = b""
-        survey_dict = {}
-
-        if not output_type == OutputType.COMMENTS:
-            submission_bytes = files[SUBMISSION_FILE].read()
-            survey_dict = json.loads(submission_bytes.decode())
-
-        if output_type == OutputType.DAP or output_type == OutputType.FEEDBACK:
-            data_bytes = submission_bytes
-
-        elif output_type == OutputType.COMMENTS:
-            logger.info('Reading comments')
-            data_bytes = files[ZIP_FILE].read()
-
-        else:
-            logger.info('else')
-            data_bytes = files[TRANSFORMED_FILE].read()
-
-        filename = request.args.get("filename")
-        logger.info(f"filename: {filename}")
-
-        deliver(filename=filename,
-                data_bytes=data_bytes,
-                survey_dict=survey_dict,
-                output_type=output_type)
-
+        deliver(meta_data, data_bytes)
         return jsonify(success=True)
     except Exception as e:
         return server_error(e)
