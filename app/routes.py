@@ -1,4 +1,5 @@
 import json
+import threading
 import structlog
 
 from flask import request, jsonify
@@ -91,6 +92,7 @@ def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
     try:
         bind_contextvars(app="sdx-deliver")
         bind_contextvars(tx_id=meta_data.tx_id)
+        bind_contextvars(thread=threading.currentThread().getName())
         logger.info(f"processing request")
         deliver(meta_data, data_bytes)
         return jsonify(success=True)
