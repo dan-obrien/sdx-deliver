@@ -1,12 +1,10 @@
-import logging
+import structlog
 
 from google.cloud import storage
-from structlog import wrap_logger
-
 from app import PROJECT_ID, BUCKET_NAME
 from app.output_type import OutputType
 
-logger = wrap_logger(logging.getLogger(__name__))
+logger = structlog.get_logger()
 
 
 def write_to_bucket(data: str, filename: str, output_type: OutputType) -> str:

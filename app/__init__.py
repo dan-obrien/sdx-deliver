@@ -1,19 +1,13 @@
 import logging
 import os
 import gnupg
+
 from google.cloud import pubsub_v1
 from flask import Flask
-
+from app.logger import logging_config
 from app.secret_manager import get_secret
 
-LOGGING_LEVEL = logging.getLevelName(os.getenv('LOGGING_LEVEL', 'DEBUG'))
-LOGGING_FORMAT = "%(asctime)s.%(msecs)06dZ|%(levelname)s: sdx-deliver: %(message)s"
-
-logging.basicConfig(
-    format=LOGGING_FORMAT,
-    datefmt="%Y-%m-%dT%H:%M:%S",
-    level=LOGGING_LEVEL,
-)
+logging_config()
 
 PROJECT_ID = os.getenv('PROJECT_ID', 'ons-sdx-sandbox')
 BUCKET_NAME = f'{PROJECT_ID}-outputs'

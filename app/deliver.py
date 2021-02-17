@@ -1,6 +1,4 @@
-import logging
-
-from structlog import wrap_logger
+import structlog
 
 from app.encrypt import encrypt_output
 from app.meta_wrapper import MetaWrapper
@@ -8,12 +6,10 @@ from app.output_type import OutputType
 from app.publish import send_message
 from app.store import write_to_bucket
 
-
-logger = wrap_logger(logging.getLogger(__name__))
+logger = structlog.get_logger()
 
 
 def deliver(meta_data: MetaWrapper, data_bytes: bytes):
-
     if meta_data.output_type == OutputType.SEFT:
         encrypted_output = data_bytes
     else:

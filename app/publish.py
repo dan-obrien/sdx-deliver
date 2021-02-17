@@ -1,25 +1,20 @@
-import logging
-
-from structlog import wrap_logger
+import structlog
 
 from app import dap_publisher, dap_topic_path, BUCKET_NAME, PROJECT_ID
 import json
 from datetime import datetime
-
 from app.meta_wrapper import MetaWrapper
 from app.output_type import OutputType
 
-logger = wrap_logger(logging.getLogger(__name__))
+logger = structlog.get_logger()
 
 
 def send_message(meta_data: MetaWrapper, path: str):
-
     message_str = create_message_data(meta_data)
     publish_data(message_str, meta_data.tx_id, path)
 
 
 def create_message_data(meta_data: MetaWrapper) -> str:
-
     if meta_data.output_type == OutputType.COMMENTS:
         dataset = "comments"
         iteration1 = None

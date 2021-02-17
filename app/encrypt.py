@@ -1,9 +1,7 @@
-import logging
-from structlog import wrap_logger
-
+import structlog
 from app import gpg
 
-logger = wrap_logger(logging.getLogger(__name__))
+logger = structlog.get_logger()
 
 DAP_RECIPIENT = 'dap@ons.gov.uk'
 
