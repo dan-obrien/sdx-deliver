@@ -71,3 +71,4 @@ def publish_data(message_str: str, tx_id: str, path: str):
     future = dap_publisher.publish(dap_topic_path, message, **attributes)
     logger.info(f"published message with tx_id={tx_id} to dap")
     return future.result()
+

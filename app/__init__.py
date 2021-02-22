@@ -13,15 +13,23 @@ PROJECT_ID = os.getenv('PROJECT_ID', 'ons-sdx-sandbox')
 BUCKET_NAME = f'{PROJECT_ID}-outputs'
 storage_client = storage.Client(PROJECT_ID)
 BUCKET = storage_client.bucket(BUCKET_NAME)
-
 dap_topic_id = "dap-topic"
-dap_publisher = pubsub_v1.PublisherClient()
-dap_topic_path = dap_publisher.topic_path(PROJECT_ID, dap_topic_id)
+dap_publisher = None
+dap_topic_path = None
 
+# key
+ENCRYPTION_KEY = None
 gpg = gnupg.GPG()
 
-ENCRYPTION_KEY = get_secret(PROJECT_ID, 'sdx-deliver-encryption')
-import_result = gpg.import_keys(ENCRYPTION_KEY)
+
+def load_config():
+    global dap_publisher
+    dap_publisher = pubsub_v1.PublisherClient()
+    dap_topic_path = dap_publisher.topic_path(PROJECT_ID, dap_topic_id)
+
+    global ENCRYPTION_KEY
+    ENCRYPTION_KEY = get_secret(PROJECT_ID, 'sdx-deliver-encryption')
+    import_result = gpg.import_keys(ENCRYPTION_KEY)
 
 
 app = Flask(__name__)
