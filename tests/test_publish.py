@@ -7,11 +7,11 @@ from unittest.mock import patch
 from app.meta_wrapper import MetaWrapper
 from app.output_type import OutputType
 from app.publish import get_formatted_current_utc, send_message, create_message_data
+from app import CONFIG
 
 
 class TestPublish(unittest.TestCase):
 
-    # mocking utcnow() method
     def test_get_formatted_current_utc(self):
         with mock.patch('datetime.datetime') as date_mock:
             date_mock.utcnow.return_value = "2021-02-15T21:45:51.991Z"
@@ -38,7 +38,7 @@ class TestPublish(unittest.TestCase):
                 'md5sum': meta_data.md5sum
             }],
             'sensitivity': 'High',
-            'sourceName': "ons-sdx-sandbox",
+            'sourceName': CONFIG.PROJECT_ID,
             'manifestCreated': mock_time.return_value,
             'description': "023 survey response for period 0216 sample unit 12345",
             'dataset': meta_data.survey_id,
@@ -67,7 +67,7 @@ class TestPublish(unittest.TestCase):
                 'md5sum': meta_data.md5sum
             }],
             'sensitivity': 'High',
-            'sourceName': 'ons-sdx-sandbox',
+            'sourceName': CONFIG.PROJECT_ID,
             'manifestCreated': self.test_get_formatted_current_utc(),
             'description': "134 survey response for period 201605 sample unit 12346789012A",
             'dataset': meta_data.survey_id,
@@ -102,7 +102,7 @@ class TestPublish(unittest.TestCase):
                 'md5sum': meta_data.md5sum
             }],
             'sensitivity': 'High',
-            'sourceName': 'ons-sdx-sandbox',
+            'sourceName': CONFIG.PROJECT_ID,
             'manifestCreated': self.test_get_formatted_current_utc(),
             'description': "023 feedback response for period 2016-02-01 sample unit 432423423423",
             'dataset': meta_data.survey_id,
@@ -139,7 +139,7 @@ class TestPublish(unittest.TestCase):
                 'md5sum': meta_data.md5sum
             }],
             'sensitivity': 'High',
-            'sourceName': 'ons-sdx-sandbox',
+            'sourceName': CONFIG.PROJECT_ID,
             'manifestCreated': self.test_get_formatted_current_utc(),
             'description': "023 comment response for period 201605 sample unit 12346789012A",
             'dataset': "comments",
@@ -175,7 +175,7 @@ class TestPublish(unittest.TestCase):
                 'md5sum': meta_data.md5sum
             }],
             'sensitivity': 'High',
-            'sourceName': 'ons-sdx-sandbox',
+            'sourceName': CONFIG.PROJECT_ID,
             'manifestCreated': self.test_get_formatted_current_utc(),
             'description': "134 survey response for period 201605 sample unit 12346789012A",
             'dataset': meta_data.survey_id,
@@ -210,7 +210,7 @@ class TestPublish(unittest.TestCase):
                 'md5sum': meta_data.md5sum
             }],
             'sensitivity': 'High',
-            'sourceName': 'ons-sdx-sandbox',
+            'sourceName': CONFIG.PROJECT_ID,
             'manifestCreated': self.test_get_formatted_current_utc(),
             'description': "134 seft response for period 201605 sample unit 12346789012A",
             'dataset': meta_data.survey_id,

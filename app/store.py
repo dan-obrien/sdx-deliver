@@ -1,6 +1,6 @@
 import structlog
 
-from app import BUCKET
+from app import CONFIG
 from app.output_type import OutputType
 
 logger = structlog.get_logger()
@@ -15,7 +15,7 @@ def write_to_bucket(data: str, filename: str, output_type: OutputType) -> str:
                  OutputType.SEFT: "seft"}.get(output_type)
 
     path = f"{directory}/{filename}"
-    blob = BUCKET.blob(path)
+    blob = CONFIG.BUCKET.blob(path)
     blob.upload_from_string(data)
     logger.info(f"Successfully uploaded: {filename} to {directory}")
     return path

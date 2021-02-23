@@ -1,6 +1,6 @@
 import structlog
 
-from app import dap_publisher, dap_topic_path, BUCKET_NAME, PROJECT_ID
+from app import CONFIG
 import json
 from datetime import datetime
 from app.meta_wrapper import MetaWrapper
@@ -30,7 +30,7 @@ def create_message_data(meta_data: MetaWrapper) -> str:
             'md5sum': meta_data.md5sum
         }],
         'sensitivity': 'High',
-        'sourceName': PROJECT_ID,
+        'sourceName': CONFIG.PROJECT_ID,
         'manifestCreated': get_formatted_current_utc(),
         'description': meta_data.get_description(),
         'dataset': dataset,
@@ -64,11 +64,10 @@ def publish_data(message_str: str, tx_id: str, path: str):
     # Data must be a byte-string
     message = message_str.encode("utf-8")
     attributes = {
-        'gcs.bucket': BUCKET_NAME,
+        'gcs.bucket': CONFIG.BUCKET_NAME,
         'gcs.key': path,
         'tx_id': tx_id
     }
-    future = dap_publisher.publish(dap_topic_path, message, **attributes)
+    future = CONFIG.DAP_PUBLISHER.publish(CONFIG.DAP_TOPIC_PATH, message, **attributes)
     logger.info(f"published message with tx_id={tx_id} to dap")
     return future.result()
-
