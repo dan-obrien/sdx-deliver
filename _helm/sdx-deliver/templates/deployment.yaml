@@ -15,7 +15,7 @@ spec:
         app: sdx-deliver
     spec:
       containers:
-      - image: eu.gcr.io/{{ .Values.project_id }}/sdx-deliver:{{ .Chart.appVersion }}
+      - image: eu.gcr.io/{{ .Values.registry_location }}/sdx-deliver:{{ .Chart.AppVersion }}
         imagePullPolicy: Always
         name: sdx-deliver
         env:
