@@ -27,9 +27,12 @@ def healthcheck():
 
 @app.route('/death', methods=['GET'])
 def death():
+    bind_contextvars(thread=threading.currentThread().getName())
     total = 0
     while True:
         total += 1
+        if total % 100 == 0:
+            logger.info(f'total = {total}')
 
 
 @app.route('/deliver/dap', methods=['POST'])
