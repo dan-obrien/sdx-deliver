@@ -32,7 +32,7 @@ def death():
     total = 0
     while True:
         total += 1
-        if total % 10000 == 0:
+        if total % 10000000 == 0:
             logger.info(f'total = {total}')
 
 
