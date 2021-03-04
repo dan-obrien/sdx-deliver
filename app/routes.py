@@ -20,6 +20,7 @@ SEFT_FILE = 'seft'
 
 @app.route('/healthcheck', methods=['GET'])
 def healthcheck():
+    bind_contextvars(thread=threading.currentThread().getName())
     response = jsonify({'status': 'OK'})
     logger.info(response)
     return response
@@ -31,7 +32,7 @@ def death():
     total = 0
     while True:
         total += 1
-        if total % 100 == 0:
+        if total % 10000 == 0:
             logger.info(f'total = {total}')
 
 
