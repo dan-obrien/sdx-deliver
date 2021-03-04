@@ -18,6 +18,20 @@ METADATA_FILE = 'metadata'
 SEFT_FILE = 'seft'
 
 
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    response = jsonify({'status': 'OK'})
+    logger.info(response)
+    return response
+
+
+@app.route('/death', methods=['GET'])
+def death():
+    total = 0
+    while True:
+        total += 1
+
+
 @app.route('/deliver/dap', methods=['POST'])
 def deliver_dap():
     filename = request.args.get("filename")
