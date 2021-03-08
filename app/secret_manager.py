@@ -1,7 +1,11 @@
 from google.cloud import secretmanager
+import structlog
+
+logger = structlog.get_logger()
 
 
 def get_secret(project_id, secret_id):
+    logger.info("Getting secrets from Secret Manager")
     version_id = 'latest'
 
     # Create the Secret Manager client.

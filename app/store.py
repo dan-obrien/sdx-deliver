@@ -8,6 +8,7 @@ logger = structlog.get_logger()
 
 def write_to_bucket(data: str, filename: str, output_type: OutputType) -> str:
     """Uploads a string to the bucket."""
+    logger.info("Uploading to bucket")
     directory = {OutputType.DAP: "dap",
                  OutputType.LEGACY: "survey",
                  OutputType.FEEDBACK: "feedback",
