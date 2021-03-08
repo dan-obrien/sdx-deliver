@@ -13,7 +13,7 @@ def encrypt_output(data_bytes: bytes) -> str:
     if encrypted_data.ok:
         logger.info("Successfully encrypted output")
     else:
-        logger.info("Failed to encrypt output")
-        logger.info(encrypted_data.status)
+        logger.error("Failed to encrypt output")
+        logger.error(encrypted_data.status)
 
     return str(encrypted_data)
