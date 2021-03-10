@@ -11,9 +11,9 @@ def encrypt_output(data_bytes: bytes) -> str:
     encrypted_data = CONFIG.GPG.encrypt(data_bytes, recipients=[DAP_RECIPIENT], always_trust=True)
 
     if encrypted_data.ok:
-        logger.info("successfully encrypted output")
+        logger.info("Successfully encrypted output")
     else:
-        logger.info("failed to encrypt output")
-        logger.info(encrypted_data.status)
+        logger.error("Failed to encrypt output")
+        logger.error(encrypted_data.status)
 
     return str(encrypted_data)

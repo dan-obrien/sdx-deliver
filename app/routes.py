@@ -20,6 +20,7 @@ SEFT_FILE = 'seft'
 
 @app.route('/deliver/dap', methods=['POST'])
 def deliver_dap():
+    logger.info('Processing DAP submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
     files = request.files
@@ -32,6 +33,7 @@ def deliver_dap():
 
 @app.route('/deliver/legacy', methods=['POST'])
 def deliver_legacy():
+    logger.info('Processing Legacy submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
     files = request.files
@@ -44,6 +46,7 @@ def deliver_legacy():
 
 @app.route('/deliver/feedback', methods=['POST'])
 def deliver_feedback():
+    logger.info('Processing Feedback submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
     files = request.files
@@ -56,6 +59,7 @@ def deliver_feedback():
 
 @app.route('/deliver/comments', methods=['POST'])
 def deliver_comments():
+    logger.info('Processing Comments submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
     files = request.files
@@ -66,6 +70,7 @@ def deliver_comments():
 
 @app.route('/deliver/seft', methods=['POST'])
 def deliver_seft():
+    logger.info('Processing SEFT submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
     files = request.files
@@ -93,7 +98,7 @@ def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
         bind_contextvars(app="sdx-deliver")
         bind_contextvars(tx_id=meta_data.tx_id)
         bind_contextvars(thread=threading.currentThread().getName())
-        logger.info(f"processing request")
+        logger.info("Processing request")
         deliver(meta_data, data_bytes)
         return jsonify(success=True)
     except Exception as e:
