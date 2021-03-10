@@ -36,7 +36,7 @@ def cloud_config():
     CONFIG.DAP_PUBLISHER = dap_publisher
 
     gpg = gnupg.GPG()
-    encryption_key = get_secret(CONFIG.PROJECT_ID, 'sdx-deliver-encryption')
+    encryption_key = get_secret(CONFIG.PROJECT_ID, 'dap-public-gpg')
     gpg.import_keys(encryption_key)
     CONFIG.ENCRYPTION_KEY = encryption_key
     CONFIG.GPG = gpg
