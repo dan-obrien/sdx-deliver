@@ -74,19 +74,25 @@ dap_message: Message {
 All submissions are stored within: `ons-sdx-{project_id}-outputs` in their respective folders. The file-path is
 specified in `attributes."gcs.key"`.
 
+### Secret Manager
+The gpg key used to encrypt JSON surveys: `dap-public-gpg` is managed by Google Secret Manager. A single API call is 
+made on program startup and stored in `ENCRYPTION_KEY`.
+
 ## API endpoints
 
 Allows Survey, SEFT and Collate to send data to be stored by deliver
 
-* `POST /deliver/dap` - Dap surveys
 
-* `POST /deliver/legacy` - Legacy surveys
+* `POST /deliver/dap` - Stores JSON surveys destined for DAP
 
-* `POST /deliver/feedback` - Feedback submissions
+* `POST /deliver/legacy` - Stores JSON surveys destined for Legacy downstream
 
-* `POST /deliver/comments` - comments endpoint called by sdx-collate
+* `POST /deliver/feedback` - Stores JSON Feedback submissions
 
-* `POST /deliver/seft` - seft endpoint called by sdx-seft
+* `POST /deliver/comments` - Stores zipped spreadsheet (.xls) of comments
+
+* `POST /deliver/seft` - Stores SEFT submissions
+
 
 ##### note: 
 deliver runs within the kubernetes cluster and utilises a `kubernetes service`.This assigns the service with an IP 
