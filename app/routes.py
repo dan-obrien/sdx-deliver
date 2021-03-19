@@ -97,7 +97,7 @@ def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
     try:
         bind_contextvars(app="sdx-deliver")
         bind_contextvars(tx_id=meta_data.tx_id)
-        bind_contextvars(tx_id=meta_data.survey_id)
+        bind_contextvars(survey_id=meta_data.survey_id)
         bind_contextvars(thread=threading.currentThread().getName())
         logger.info("Processing request")
         deliver(meta_data, data_bytes)
