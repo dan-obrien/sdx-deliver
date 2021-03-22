@@ -101,6 +101,7 @@ def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
         bind_contextvars(thread=threading.currentThread().getName())
         logger.info("Processing request")
         deliver(meta_data, data_bytes)
+        logger.info("Process complete")
         return jsonify(success=True)
     except Exception as e:
         return server_error(e)
