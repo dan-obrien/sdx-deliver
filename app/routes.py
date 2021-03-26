@@ -95,7 +95,7 @@ def server_error(error=None):
 
 def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
     try:
-        bind_contextvars(app="sdx-deliver")
+        bind_contextvars(app="SDX-Deliver")
         bind_contextvars(tx_id=meta_data.tx_id)
         bind_contextvars(survey_id=meta_data.survey_id)
         bind_contextvars(output_type=meta_data.output_type)
