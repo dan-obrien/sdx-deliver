@@ -10,11 +10,17 @@ logger = structlog.get_logger()
 
 
 def send_message(meta_data: MetaWrapper, path: str):
+    """
+    Sends notification to DAP, based on the Metawrapper data
+    """
     message_str = create_message_data(meta_data)
     publish_data(message_str, meta_data.tx_id, path)
 
 
 def create_message_data(meta_data: MetaWrapper) -> str:
+    """
+    Generates PubSub message using MetaWrapper
+    """
     if meta_data.output_type == OutputType.COMMENTS:
         dataset = "comments"
         iteration1 = None
@@ -61,6 +67,9 @@ def get_formatted_current_utc():
 
 
 def publish_data(message_str: str, tx_id: str, path: str):
+    """
+    Publishes message to DAP
+    """
     # Data must be a byte-string
     message = message_str.encode("utf-8")
     attributes = {

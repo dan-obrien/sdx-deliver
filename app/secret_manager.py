@@ -4,7 +4,10 @@ import structlog
 logger = structlog.get_logger()
 
 
-def get_secret(project_id, secret_id):
+def get_secret(project_id: str, secret_id: str) -> str:
+    """
+    Makes API call to Google Secret Manager, retrieving secret.
+    """
     logger.info("Getting secrets from Secret Manager")
     version_id = 'latest'
 

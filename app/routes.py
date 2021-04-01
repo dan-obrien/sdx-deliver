@@ -20,6 +20,10 @@ SEFT_FILE = 'seft'
 
 @app.route('/deliver/dap', methods=['POST'])
 def deliver_dap():
+    """
+    Endpoint for submissions only intended for DAP. POST request requires the submission JSON to be uploaded as "submission" and
+    the filename passed in the query parameters.
+    """
     logger.info('Processing DAP submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
@@ -33,6 +37,11 @@ def deliver_dap():
 
 @app.route('/deliver/legacy', methods=['POST'])
 def deliver_legacy():
+    """
+    Endpoint for submissions intended for legacy systems. POST request requires the submission JSON to be uploaded as
+    "submission", the zipped transformed artifact as "transformed", and the filename passed in the query
+    parameters.
+    """
     logger.info('Processing Legacy submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
@@ -46,6 +55,10 @@ def deliver_legacy():
 
 @app.route('/deliver/feedback', methods=['POST'])
 def deliver_feedback():
+    """
+    Endpoint for feedback submissions only. POST request requires the feedback JSON to be uploaded as
+    "submission", and the filename passed in the query parameters.
+    """
     logger.info('Processing Feedback submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
@@ -59,6 +72,10 @@ def deliver_feedback():
 
 @app.route('/deliver/comments', methods=['POST'])
 def deliver_comments():
+    """
+    Endpoint for delivering daily comment report. POST request requires the zipped up comments to be uploaded as
+    "zip", and the filename passed in the query parameters.
+    """
     logger.info('Processing Comments submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
@@ -70,6 +87,11 @@ def deliver_comments():
 
 @app.route('/deliver/seft', methods=['POST'])
 def deliver_seft():
+    """
+    Endpoint for delivering SEFT submissions. POST request requires the encrypted SEFT to be uploaded as
+    "seft", metadata JSON as "metadata", and the filename passed in the query parameters.
+    Metadata file is required to provide information about the submissions to construct the PubSub message.
+    """
     logger.info('Processing SEFT submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
@@ -94,6 +116,9 @@ def server_error(error=None):
 
 
 def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
+    """
+    Binds submission data to logger and begins deliver process
+    """
     try:
         bind_contextvars(app="sdx-deliver")
         bind_contextvars(tx_id=meta_data.tx_id)

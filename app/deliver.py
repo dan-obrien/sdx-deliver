@@ -10,6 +10,10 @@ logger = structlog.get_logger()
 
 
 def deliver(meta_data: MetaWrapper, data_bytes: bytes):
+    """
+    Encrypts any unencrypted data, writes to the appropriate location within the outputs GCP bucket and notifies DAP
+    via PubSub
+    """
     if meta_data.output_type == OutputType.SEFT:
         encrypted_output = data_bytes
     else:

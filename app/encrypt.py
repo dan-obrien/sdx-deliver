@@ -7,6 +7,9 @@ DAP_RECIPIENT = 'dap@ons.gov.uk'
 
 
 def encrypt_output(data_bytes: bytes) -> str:
+    """
+    Encrypts data using DAP public key (GPG)
+    """
 
     encrypted_data = CONFIG.GPG.encrypt(data_bytes, recipients=[DAP_RECIPIENT], always_trust=True)
 

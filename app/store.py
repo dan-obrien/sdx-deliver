@@ -7,7 +7,9 @@ logger = structlog.get_logger()
 
 
 def write_to_bucket(data: str, filename: str, output_type: OutputType) -> str:
-    """Uploads a string to the bucket."""
+    """
+    Uploads a string submission to the correct folder within the GCP outputs bucket.
+    """
     logger.info("Uploading to bucket")
     directory = {OutputType.DAP: "dap",
                  OutputType.LEGACY: "survey",
