@@ -120,11 +120,14 @@ def process(meta_data: MetaWrapper, data_bytes: bytes) -> str:
     Binds submission data to logger and begins deliver process
     """
     try:
-        bind_contextvars(app="sdx-deliver")
+        bind_contextvars(app="SDX-Deliver")
         bind_contextvars(tx_id=meta_data.tx_id)
+        bind_contextvars(survey_id=meta_data.survey_id)
+        bind_contextvars(output_type=meta_data.output_type)
         bind_contextvars(thread=threading.currentThread().getName())
         logger.info("Processing request")
         deliver(meta_data, data_bytes)
+        logger.info("Process completed successfully")
         return jsonify(success=True)
     except Exception as e:
         return server_error(e)
