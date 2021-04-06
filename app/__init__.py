@@ -29,7 +29,10 @@ CONFIG = Config(project_id)
 
 
 def cloud_config():
-
+    """
+    The cloud_config method gives us control over GCP Connections. It can be omitted when these connections are not
+    needed such as UnitTesting
+    """
     logger.info("Loading Cloud Config")
     dap_publisher = pubsub_v1.PublisherClient()
     CONFIG.DAP_TOPIC_PATH = dap_publisher.topic_path(CONFIG.PROJECT_ID, "dap-topic")

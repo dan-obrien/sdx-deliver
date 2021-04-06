@@ -5,6 +5,10 @@ from app.output_type import OutputType
 
 class MetaWrapper:
 
+    """
+    This class provides a common interface to the metadata associated with different types of survey submissions
+    """
+
     def __init__(self, filename):
         self.filename = filename
         self.tx_id = None

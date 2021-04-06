@@ -5,5 +5,5 @@ start:
 	 python run.py
 
 test:
-	pip install -r test_requirements.txt ; \
-	pytest --cov tests
+	pip install -r test_requirements.txt
+	pytest --cov-report term-missing --cov=app tests/
