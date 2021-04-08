@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import patch, MagicMock
 
+from unittest.mock import patch, MagicMock
 from app.output_type import OutputType
 from app.store import write_to_bucket
 

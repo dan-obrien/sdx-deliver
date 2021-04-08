@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import patch
 from app.deliver import deliver
 from app.meta_wrapper import MetaWrapper
+from app.output_type import OutputType
 
 
 class TestDeliver(unittest.TestCase):
@@ -16,6 +17,17 @@ class TestDeliver(unittest.TestCase):
         filename = "9010576d-f3df-4011-aa41-adecd9bee011"
         meta_data = MetaWrapper(filename)
         mock_encrypt_output.return_value = encrypted_message
+        mock_write_to_bucket.return_value = path
+        deliver(meta_data, b"bytes")
+        mock_send_message.assert_called_with(meta_data, path)
+
+    @patch('app.deliver.write_to_bucket')
+    @patch('app.deliver.send_message')
+    def test_deliver_seft(self, mock_send_message, mock_write_to_bucket):
+        path = "dap/"
+        filename = "9010576d-f3df-4011-aa41-adecd9bee011"
+        meta_data = MetaWrapper(filename)
+        meta_data.output_type = OutputType.SEFT
         mock_write_to_bucket.return_value = path
         deliver(meta_data, b"bytes")
         mock_send_message.assert_called_with(meta_data, path)
