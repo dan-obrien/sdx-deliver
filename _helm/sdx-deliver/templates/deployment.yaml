@@ -29,4 +29,12 @@ spec:
               configMapKeyRef:
                 name: sdx-config
                 key: logging_level
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 5000
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+          periodSeconds: 10
+          failureThreshold: 3
       serviceAccountName: sdx-workload-identity

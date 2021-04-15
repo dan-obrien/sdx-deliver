@@ -103,6 +103,11 @@ def deliver_seft():
     return process(meta, data_bytes)
 
 
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    return jsonify({'status': 'OK'})
+
+
 @app.errorhandler(500)
 def server_error(error=None):
     logger.error("Server error", error=repr(error))
