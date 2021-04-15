@@ -1,7 +1,7 @@
-Flask~=1.1.2
-google-cloud-pubsub
-google~=3.0.0
-google-cloud-storage
-google-cloud-secret-manager
-structlog==20.1.0
-python-gnupg==0.4.6
+Flask==1.1.2
+google-cloud-pubsub==2.4.1
+google==3.0.0
+google-cloud-storage==1.37.1
+google-cloud-secret-manager==2.4.0
+structlog==21.1.0
+python-gnupg==0.4.7
