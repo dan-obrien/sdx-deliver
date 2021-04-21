@@ -1,3 +1,4 @@
+import json
 import unittest
 from unittest import mock
 
@@ -139,3 +140,8 @@ class TestRoutes(unittest.TestCase):
             resp.status_code = 500
             actual = server_error(error)
             assert actual.status_code == 500
+
+    @patch('app.routes.jsonify')
+    def test_healthcheck(self, mock_jsonify):
+        routes.healthcheck()
+        mock_jsonify.assert_called_with({'status': 'OK'})
