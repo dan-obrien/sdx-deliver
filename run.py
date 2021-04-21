@@ -8,8 +8,8 @@ logger = structlog.get_logger()
 
 class Server(BaseApplication):
 
-    def __init__(self, application, options=None):
-        self.options = options or {}
+    def __init__(self, application, options_dict=None):
+        self.options = options_dict or {}
         self.application = application
         super().__init__()
 
@@ -32,5 +32,3 @@ if __name__ == '__main__':
         'workers': 2,
     }
     Server(app, options).run()
-
-    # app.run(debug=False, host='0.0.0.0', port=5000)
