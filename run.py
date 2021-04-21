@@ -1,7 +1,7 @@
+import structlog
 from gunicorn.app.base import BaseApplication
 
 from app import app, cloud_config
-import structlog
 
 logger = structlog.get_logger()
 
