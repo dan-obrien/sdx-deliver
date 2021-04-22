@@ -3,6 +3,13 @@ import hashlib
 from app.output_type import OutputType
 
 
+locations = {
+    "DAP": "dap",
+    "FTP": "ftp",
+    "HYBRID": "hybrid"
+}
+
+
 class MetaWrapper:
 
     """
@@ -30,26 +37,37 @@ class MetaWrapper:
         self.sizeBytes = len(data_bytes)
 
     def set_legacy(self, survey_dict: dict, data_bytes: bytes):
+        self.filename = f'{self.filename}:{locations["FTP"]}'
         self.output_type = OutputType.LEGACY
         self._from_survey(survey_dict)
         self._generate_hash(data_bytes)
 
+    def set_hybrid(self, survey_dict: dict, data_bytes: bytes):
+        self.filename = f'{self.filename}:{locations["HYBRID"]}'
+        self.output_type = OutputType.HYBRID
+        self._from_survey(survey_dict)
+        self._generate_hash(data_bytes)
+
     def set_dap(self, survey_dict: dict, data_bytes: bytes):
+        self.filename = f'{self.filename}:{locations["DAP"]}'
         self.output_type = OutputType.DAP
         self._from_survey(survey_dict)
         self._generate_hash(data_bytes)
 
     def set_feedback(self, survey_dict: dict, data_bytes: bytes):
+        self.filename = f'{self.filename}:{locations["FTP"]}'
         self.output_type = OutputType.FEEDBACK
         self._from_survey(survey_dict)
         self._generate_hash(data_bytes)
 
     def set_comments(self, data_bytes: bytes):
+        self.filename = f'{self.filename}:{locations["FTP"]}'
         self.output_type = OutputType.COMMENTS
         self._generate_hash(data_bytes)
         self.tx_id = self.filename
 
     def set_seft(self, meta_dict: dict):
+        self.filename = f'{self.filename}:{locations["FTP"]}'
         self.output_type = OutputType.SEFT
         self.tx_id = meta_dict['tx_id']
         self.survey_id = meta_dict['survey_id']
@@ -64,6 +82,7 @@ class MetaWrapper:
         else:
             response_type = {OutputType.DAP: 'survey',
                              OutputType.LEGACY: 'survey',
+                             OutputType.HYBRID: 'survey',
                              OutputType.FEEDBACK: 'feedback',
                              OutputType.SEFT: 'seft'}.get(self.output_type)
             return f"{self.survey_id} {response_type} response for period {self.period} sample unit {self.ru_ref}"

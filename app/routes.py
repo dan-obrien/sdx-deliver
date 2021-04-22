@@ -21,8 +21,8 @@ SEFT_FILE = 'seft'
 @app.route('/deliver/dap', methods=['POST'])
 def deliver_dap():
     """
-    Endpoint for submissions only intended for DAP. POST request requires the submission JSON to be uploaded as "submission" and
-    the filename passed in the query parameters.
+    Endpoint for submissions only intended for DAP. POST request requires the submission JSON to be uploaded
+    as "submission" and the filename passed in the query parameters.
     """
     logger.info('Processing DAP submission')
     filename = request.args.get("filename")
@@ -43,6 +43,24 @@ def deliver_legacy():
     parameters.
     """
     logger.info('Processing Legacy submission')
+    filename = request.args.get("filename")
+    meta = MetaWrapper(filename)
+    files = request.files
+    submission_bytes = files[SUBMISSION_FILE].read()
+    survey_dict = json.loads(submission_bytes.decode())
+    data_bytes = files[TRANSFORMED_FILE].read()
+    meta.set_legacy(survey_dict, data_bytes)
+    return process(meta, data_bytes)
+
+
+@app.route('/deliver/hybrid', methods=['POST'])
+def deliver_hybrid():
+    """
+    Endpoint for submissions intended for dap and legacy systems. POST request requires the submission JSON to be
+    uploaded as "submission", the zipped transformed artifact as "transformed", and the filename passed in the
+    query parameters.
+    """
+    logger.info('Processing Hybrid submission')
     filename = request.args.get("filename")
     meta = MetaWrapper(filename)
     files = request.files
