@@ -60,6 +60,7 @@ class TestMetaWrapper(unittest.TestCase):
         meta_data.set_dap(self.test_survey, self.test_bytes)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
+        self.assertEqual(f'{filename}:dap', meta_data.filename)
 
     def test_set_legacy(self):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
@@ -68,6 +69,16 @@ class TestMetaWrapper(unittest.TestCase):
         meta_data.set_legacy(self.test_survey, self.test_bytes)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
+        self.assertEqual(f'{filename}:ftp', meta_data.filename)
+
+    def test_set_hybrid(self):
+        filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
+        expected = "009 survey response for period 2019 sample unit 49900108249D"
+        meta_data = MetaWrapper(filename)
+        meta_data.set_hybrid(self.test_survey, self.test_bytes)
+        actual = meta_data.get_description()
+        self.assertEqual(expected, actual)
+        self.assertEqual(f'{filename}:hybrid', meta_data.filename)
 
     def test_set_feedback(self):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
@@ -76,6 +87,7 @@ class TestMetaWrapper(unittest.TestCase):
         meta_data.set_feedback(self.test_survey, self.test_bytes)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
+        self.assertEqual(f'{filename}:ftp', meta_data.filename)
 
     def test_set_comments(self):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
@@ -84,6 +96,7 @@ class TestMetaWrapper(unittest.TestCase):
         meta_data.set_comments(self.test_bytes)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
+        self.assertEqual(f'{filename}:ftp', meta_data.filename)
 
     def test_set_seft(self):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
@@ -92,6 +105,4 @@ class TestMetaWrapper(unittest.TestCase):
         meta_data.set_seft(self.test_seft)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
-
-
-
+        self.assertEqual(f'{filename}:ftp', meta_data.filename)

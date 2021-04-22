@@ -57,7 +57,6 @@ class TestPublish(unittest.TestCase):
         self.meta_data.output_type = OutputType.FEEDBACK
         self.expected['manifestCreated'] = mock_time.return_value
         self.expected['description'] = '023 feedback response for period 0216 sample unit 12345'
-        self.expected['iterationL2'] = "feedback"
 
         actual = create_message_data(self.meta_data)
         self.assertEqual(json.dumps(self.expected), actual)
