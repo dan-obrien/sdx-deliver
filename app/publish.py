@@ -46,10 +46,7 @@ def create_message_data(meta_data: MetaWrapper) -> str:
     if iteration1 is not None:
         message_data['iterationL1'] = iteration1
 
-    if meta_data.output_type == OutputType.FEEDBACK:
-        message_data['iterationL2'] = "feedback"
-
-    logger.info("Created dap data")
+    logger.info("Created pubsub message")
     str_dap_message = json.dumps(message_data)
     return str_dap_message
 

@@ -65,6 +65,26 @@ class TestRoutes(unittest.TestCase):
     @patch('app.routes.MetaWrapper')
     @patch('app.routes.deliver')
     @patch('app.routes.jsonify')
+    def test_deliver_hybrid(self, mock_jsonify, mock_deliver, mock_meta_wrapper):
+        filename = "test_filename"
+        submission_bytes = b'{"survey_id":"147"}'
+
+        mock_request = MagicMock()
+        mock_request.args['filename'] = filename
+
+        mock_file_bytes = FakeFileBytes(submission_bytes)
+        mock_request.files = {TRANSFORMED_FILE: mock_file_bytes, SUBMISSION_FILE: mock_file_bytes}
+
+        routes.request = mock_request
+        routes.deliver_hybrid()
+
+        mock_deliver.assert_called()
+        mock_jsonify.assert_called_with(success=True)
+        mock_meta_wrapper.assert_called()
+
+    @patch('app.routes.MetaWrapper')
+    @patch('app.routes.deliver')
+    @patch('app.routes.jsonify')
     def test_deliver_feedback(self, mock_jsonify, mock_deliver, mock_meta_wrapper):
         filename = "test_filename"
         submission_bytes = b'{"survey_id":"283"}'
