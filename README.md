@@ -15,14 +15,18 @@ construct a PubSub message to: `dap-topic`. This notifies DAP that a new submiss
 before being stored
 
 ## Getting started
+Install pipenv:
+```shell
+$ pip install pipenv
+```
 
-Install requirements:
+Create a virtualenv and install dependencies
 ```shell
 $ make build
 ```
 
 **Testing**:
-ensure you have installed all requirements with above `make build` command then:
+Install all test requirements and run tests:
 ```shell
 $ make test
 ```
