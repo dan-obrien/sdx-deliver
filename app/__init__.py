@@ -25,9 +25,12 @@ class Config:
         self.GPG = None
         if proj_id == "ons-sdx-preprod":
             data_sensitivity = "Low"
+            recipients = ["sdx_preprod@ons.gov.uk"]
         else:
             data_sensitivity = "High"
+            recipients = ['dap@ons.gov.uk']
         self.DATA_SENSITIVITY = data_sensitivity
+        self.RECIPIENTS = recipients
 
 
 CONFIG = Config(project_id)
