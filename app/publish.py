@@ -22,7 +22,7 @@ def create_message_data(meta_data: MetaWrapper) -> str:
     Generates PubSub message using MetaWrapper
     """
     if meta_data.output_type == OutputType.COMMENTS:
-        dataset = "comments"
+        dataset = "sdx_comments"
         iteration1 = None
     else:
         dataset = meta_data.survey_id
@@ -35,7 +35,7 @@ def create_message_data(meta_data: MetaWrapper) -> str:
             'sizeBytes': meta_data.sizeBytes,
             'md5sum': meta_data.md5sum
         }],
-        'sensitivity': 'High',
+        'sensitivity': CONFIG.DATA_SENSITIVITY,
         'sourceName': CONFIG.PROJECT_ID,
         'manifestCreated': get_formatted_current_utc(),
         'description': meta_data.get_description(),

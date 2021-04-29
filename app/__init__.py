@@ -23,6 +23,11 @@ class Config:
         self.DAP_PUBLISHER = None
         self.ENCRYPTION_KEY = None
         self.GPG = None
+        if proj_id == "ons-sdx-preprod":
+            data_sensitivity = "Low"
+        else:
+            data_sensitivity = "High"
+        self.DATA_SENSITIVITY = data_sensitivity
 
 
 CONFIG = Config(project_id)

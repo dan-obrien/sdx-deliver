@@ -66,7 +66,7 @@ class TestPublish(unittest.TestCase):
         self.meta_data.output_type = OutputType.COMMENTS
         self.expected['manifestCreated'] = mock_time.return_value
         self.expected['description'] = "Comments.zip"
-        self.expected['dataset'] = "comments"
+        self.expected['dataset'] = "sdx_comments"
         self.expected.pop('iterationL1')
 
         actual = create_message_data(self.meta_data)
