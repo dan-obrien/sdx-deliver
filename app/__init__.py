@@ -12,6 +12,7 @@ logging_config()
 logger = structlog.get_logger()
 project_id = os.getenv('PROJECT_ID', 'ons-sdx-sandbox')
 
+PROD_ENVS = ["ons-sdx-prod", "ons-sdx-preprod"]
 
 class Config:
 
@@ -48,6 +49,8 @@ def cloud_config():
 
     gpg = gnupg.GPG()
     encryption_key = get_secret(CONFIG.PROJECT_ID, 'dap-public-gpg')
+    if project_id not in PROD_ENVS:
+        encryption_key = encryption_key.decode("UTF-8")
     gpg.import_keys(encryption_key)
     CONFIG.ENCRYPTION_KEY = encryption_key
     CONFIG.GPG = gpg
