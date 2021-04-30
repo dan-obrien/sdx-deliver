@@ -4,7 +4,7 @@ import structlog
 logger = structlog.get_logger()
 
 
-def get_secret(project_id: str, secret_id: str) -> str:
+def get_secret(project_id: str, secret_id: str) -> bytes:
     """
     Makes API call to Google Secret Manager, retrieving secret.
     """
@@ -19,5 +19,6 @@ def get_secret(project_id: str, secret_id: str) -> str:
 
     response = client.access_secret_version(request={"name": name})
 
-    payload = response.payload.data.decode("UTF-8")
+    payload = response.payload.data
+
     return payload

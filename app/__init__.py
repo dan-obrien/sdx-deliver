@@ -12,6 +12,8 @@ logging_config()
 logger = structlog.get_logger()
 project_id = os.getenv('PROJECT_ID', 'ons-sdx-sandbox')
 
+PROD_ENVS = ["ons-sdx-prod", "ons-sdx-preprod"]
+
 
 class Config:
 
@@ -25,9 +27,12 @@ class Config:
         self.GPG = None
         if proj_id == "ons-sdx-preprod":
             data_sensitivity = "Low"
+            recipients = ["sdx_preprod@ons.gov.uk"]
         else:
             data_sensitivity = "High"
+            recipients = ['dap@ons.gov.uk']
         self.DATA_SENSITIVITY = data_sensitivity
+        self.RECIPIENTS = recipients
 
 
 CONFIG = Config(project_id)
@@ -45,6 +50,11 @@ def cloud_config():
 
     gpg = gnupg.GPG()
     encryption_key = get_secret(CONFIG.PROJECT_ID, 'dap-public-gpg')
+
+    if project_id not in PROD_ENVS:
+        # test keys are in ascii
+        encryption_key = encryption_key.decode("UTF-8")
+
     gpg.import_keys(encryption_key)
     CONFIG.ENCRYPTION_KEY = encryption_key
     CONFIG.GPG = gpg
