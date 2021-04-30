@@ -83,7 +83,7 @@ def deliver_feedback():
     files = request.files
     submission_bytes = files[SUBMISSION_FILE].read()
     survey_dict = json.loads(submission_bytes.decode())
-    data_bytes = survey_dict
+    data_bytes = submission_bytes
     meta.set_feedback(survey_dict, data_bytes)
     return process(meta, data_bytes)
 
