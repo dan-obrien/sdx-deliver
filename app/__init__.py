@@ -12,7 +12,7 @@ logging_config()
 logger = structlog.get_logger()
 project_id = os.getenv('PROJECT_ID', 'ons-sdx-sandbox')
 
-PROD_ENVS = ["ons-sdx-prod", "ons-sdx-preprod", "ons-sdx-jon"]
+PROD_ENVS = ["ons-sdx-prod", "ons-sdx-preprod"]
 
 
 class Config:
