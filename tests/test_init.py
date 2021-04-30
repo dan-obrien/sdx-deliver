@@ -18,7 +18,7 @@ class TestInit(unittest.TestCase):
         cloud_config()
         ds_client.assert_called_with(project=app.project_id)
 
-    @patch('app.get_secret', return_value='my secret')
+    @patch('app.get_secret', return_value=b'my secret')
     @patch('app.pubsub_v1')
     @patch('app.storage')
     def test_cloud_config(self, mock_bucket, mock_pubsub, mock_secret):
