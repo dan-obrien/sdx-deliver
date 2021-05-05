@@ -69,9 +69,11 @@ def publish_data(message_str: str, tx_id: str, path: str):
     """
     # Data must be a byte-string
     message = message_str.encode("utf-8")
+    # NIFI can't handle forward slash
+    key = path.replace("/", "|")
     attributes = {
         'gcs.bucket': CONFIG.BUCKET_NAME,
-        'gcs.key': path,
+        'gcs.key': key,
         'tx_id': tx_id
     }
     future = CONFIG.DAP_PUBLISHER.publish(CONFIG.DAP_TOPIC_PATH, message, **attributes)

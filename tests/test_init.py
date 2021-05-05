@@ -23,7 +23,7 @@ class TestInit(unittest.TestCase):
     @patch('app.storage')
     def test_cloud_config(self, mock_bucket, mock_pubsub, mock_secret):
         cloud_config()
-        assert app.CONFIG.ENCRYPTION_KEY == 'my secret'
+        assert app.CONFIG.ENCRYPTION_KEY == b'my secret'
         assert app.CONFIG.BUCKET is not None
         assert app.CONFIG.DAP_PUBLISHER is not None
         assert app.CONFIG.DAP_TOPIC_PATH is not None

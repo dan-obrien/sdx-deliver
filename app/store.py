@@ -20,7 +20,10 @@ def write_to_bucket(data: str, filename: str, output_type: OutputType) -> str:
     """
     logger.info("Uploading to bucket")
     directory = dir_dict.get(output_type)
-    path = f"{directory}/{filename}"
+    # remove destination suffix
+    name = filename.split(":")[0]
+    path = f"{directory}/{name}"
+    logger.info(f"Storing as {path}")
     blob = CONFIG.BUCKET.blob(path)
     blob.upload_from_string(data)
     logger.info(f"Successfully uploaded: {filename} to {directory}")
