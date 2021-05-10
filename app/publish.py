@@ -13,11 +13,11 @@ def send_message(meta_data: MetaWrapper, path: str):
     """
     Sends notification to DAP, based on the Metawrapper data
     """
-    message_str = create_message_data(meta_data)
-    publish_data(message_str, meta_data.tx_id, path)
+    message_str = create_message_data(meta_data, path)
+    publish_data(message_str, meta_data.tx_id)
 
 
-def create_message_data(meta_data: MetaWrapper) -> str:
+def create_message_data(meta_data: MetaWrapper, path: str) -> str:
     """
     Generates PubSub message using MetaWrapper
     """
@@ -27,6 +27,9 @@ def create_message_data(meta_data: MetaWrapper) -> str:
     else:
         dataset = meta_data.survey_id
         iteration1 = meta_data.period
+
+    # NIFI can't handle forward slash
+    key = path.replace("/", "|")
 
     message_data = {
         'version': '1',
@@ -40,7 +43,9 @@ def create_message_data(meta_data: MetaWrapper) -> str:
         'manifestCreated': get_formatted_current_utc(),
         'description': meta_data.get_description(),
         'dataset': dataset,
-        'schemaversion': '1'
+        'schemaversion': '1',
+        'gcs.bucket': CONFIG.BUCKET_NAME,
+        'gcs.key': key
     }
 
     if iteration1 is not None:
@@ -63,19 +68,17 @@ def get_formatted_current_utc():
     return f"{date_time.strftime('%Y-%m-%dT%H:%M:%S')}.{milliseconds}Z"
 
 
-def publish_data(message_str: str, tx_id: str, path: str):
+def publish_data(message_str: str, tx_id: str):
     """
     Publishes message to DAP
     """
     # Data must be a byte-string
     message = message_str.encode("utf-8")
-    # NIFI can't handle forward slash
-    key = path.replace("/", "|")
+
     attributes = {
-        'gcs.bucket': CONFIG.BUCKET_NAME,
-        'gcs.key': key,
         'tx_id': tx_id
     }
+
     future = CONFIG.DAP_PUBLISHER.publish(CONFIG.DAP_TOPIC_PATH, message, **attributes)
     logger.info("Published message to DAP topic", tx_id=tx_id)
     return future.result()
