@@ -23,7 +23,7 @@ class Config:
         self.DAP_PUBLISHER = None
         self.ENCRYPTION_KEY = None
         self.GPG = None
-        if proj_id == "ons-sdx-preprod":
+        if proj_id == "ons-sdx-preprod" or proj_id == "ons-sdx-jon":
             data_sensitivity = "Low"
             recipients = ["sdx_preprod@ons.gov.uk"]
         else:
