@@ -1,5 +1,3 @@
-import hashlib
-
 from app.output_type import OutputType
 
 
@@ -32,38 +30,29 @@ class MetaWrapper:
         self.period = survey_dict['collection']['period']
         self.ru_ref = survey_dict['metadata']['ru_ref']
 
-    def _generate_hash(self, data_bytes: bytes):
-        self.md5sum = hashlib.md5(data_bytes).hexdigest()
-        self.sizeBytes = len(data_bytes)
-
-    def set_legacy(self, survey_dict: dict, data_bytes: bytes):
+    def set_legacy(self, survey_dict: dict):
         self.filename = f'{self.filename}:{locations["FTP"]}'
         self.output_type = OutputType.LEGACY
         self._from_survey(survey_dict)
-        self._generate_hash(data_bytes)
 
-    def set_hybrid(self, survey_dict: dict, data_bytes: bytes):
+    def set_hybrid(self, survey_dict: dict):
         self.filename = f'{self.filename}:{locations["HYBRID"]}'
         self.output_type = OutputType.HYBRID
         self._from_survey(survey_dict)
-        self._generate_hash(data_bytes)
 
-    def set_dap(self, survey_dict: dict, data_bytes: bytes):
+    def set_dap(self, survey_dict: dict):
         self.filename = f'{self.filename}:{locations["DAP"]}'
         self.output_type = OutputType.DAP
         self._from_survey(survey_dict)
-        self._generate_hash(data_bytes)
 
-    def set_feedback(self, survey_dict: dict, data_bytes: bytes):
+    def set_feedback(self, survey_dict: dict):
         self.filename = f'{self.filename}:{locations["FTP"]}'
         self.output_type = OutputType.FEEDBACK
         self._from_survey(survey_dict)
-        self._generate_hash(data_bytes)
 
-    def set_comments(self, data_bytes: bytes):
+    def set_comments(self):
         self.filename = f'{self.filename}:{locations["FTP"]}'
         self.output_type = OutputType.COMMENTS
-        self._generate_hash(data_bytes)
         self.tx_id = self.filename
 
     def set_seft(self, meta_dict: dict):
