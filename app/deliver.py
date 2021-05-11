@@ -21,8 +21,9 @@ def deliver(meta_data: MetaWrapper, data_bytes: bytes):
     else:
         logger.info("Encrypting output")
         encrypted_output = encrypt_output(data_bytes)
-        meta_data.md5sum = hashlib.md5(encrypted_output).hexdigest()
-        meta_data.sizeBytes = len(encrypted_output)
+        encrypted_bytes = encrypted_output.encode()
+        meta_data.md5sum = hashlib.md5(encrypted_bytes).hexdigest()
+        meta_data.sizeBytes = len(encrypted_bytes)
 
     logger.info("Storing to bucket")
     path = write_to_bucket(encrypted_output, filename=meta_data.filename, output_type=meta_data.output_type)

@@ -57,7 +57,7 @@ class TestMetaWrapper(unittest.TestCase):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
         expected = "009 survey response for period 2019 sample unit 49900108249D"
         meta_data = MetaWrapper(filename)
-        meta_data.set_dap(self.test_survey, self.test_bytes)
+        meta_data.set_dap(self.test_survey)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
         self.assertEqual(f'{filename}:dap', meta_data.filename)
@@ -66,7 +66,7 @@ class TestMetaWrapper(unittest.TestCase):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
         expected = "009 survey response for period 2019 sample unit 49900108249D"
         meta_data = MetaWrapper(filename)
-        meta_data.set_legacy(self.test_survey, self.test_bytes)
+        meta_data.set_legacy(self.test_survey)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
         self.assertEqual(f'{filename}:ftp', meta_data.filename)
@@ -75,7 +75,7 @@ class TestMetaWrapper(unittest.TestCase):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
         expected = "009 survey response for period 2019 sample unit 49900108249D"
         meta_data = MetaWrapper(filename)
-        meta_data.set_hybrid(self.test_survey, self.test_bytes)
+        meta_data.set_hybrid(self.test_survey)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
         self.assertEqual(f'{filename}:hybrid', meta_data.filename)
@@ -84,7 +84,7 @@ class TestMetaWrapper(unittest.TestCase):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
         expected = "009 feedback response for period 2019 sample unit 49900108249D"
         meta_data = MetaWrapper(filename)
-        meta_data.set_feedback(self.test_survey, self.test_bytes)
+        meta_data.set_feedback(self.test_survey)
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
         self.assertEqual(f'{filename}:ftp', meta_data.filename)
@@ -93,7 +93,7 @@ class TestMetaWrapper(unittest.TestCase):
         filename = "c37a3efa-593c-4bab-b49c-bee0613c4fb2"
         expected = "Comments.zip"
         meta_data = MetaWrapper(filename)
-        meta_data.set_comments(self.test_bytes)
+        meta_data.set_comments()
         actual = meta_data.get_description()
         self.assertEqual(expected, actual)
         self.assertEqual(f'{filename}:ftp', meta_data.filename)
