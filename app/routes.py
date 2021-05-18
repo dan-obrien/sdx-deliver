@@ -18,7 +18,7 @@ METADATA_FILE = 'metadata'
 SEFT_FILE = 'seft'
 
 
-@app.route('/deliver/dap', methods=['POST'])
+@app.post('/deliver/dap')
 def deliver_dap():
     """
     Endpoint for submissions only intended for DAP. POST request requires the submission JSON to be uploaded
@@ -35,7 +35,7 @@ def deliver_dap():
     return process(meta, data_bytes)
 
 
-@app.route('/deliver/legacy', methods=['POST'])
+@app.post('/deliver/legacy')
 def deliver_legacy():
     """
     Endpoint for submissions intended for legacy systems. POST request requires the submission JSON to be uploaded as
@@ -53,7 +53,7 @@ def deliver_legacy():
     return process(meta, data_bytes)
 
 
-@app.route('/deliver/hybrid', methods=['POST'])
+@app.post('/deliver/hybrid')
 def deliver_hybrid():
     """
     Endpoint for submissions intended for dap and legacy systems. POST request requires the submission JSON to be
@@ -71,7 +71,7 @@ def deliver_hybrid():
     return process(meta, data_bytes)
 
 
-@app.route('/deliver/feedback', methods=['POST'])
+@app.post('/deliver/feedback')
 def deliver_feedback():
     """
     Endpoint for feedback submissions only. POST request requires the feedback JSON to be uploaded as
@@ -88,7 +88,7 @@ def deliver_feedback():
     return process(meta, data_bytes)
 
 
-@app.route('/deliver/comments', methods=['POST'])
+@app.post('/deliver/comments')
 def deliver_comments():
     """
     Endpoint for delivering daily comment report. POST request requires the zipped up comments to be uploaded as
@@ -103,7 +103,7 @@ def deliver_comments():
     return process(meta, data_bytes)
 
 
-@app.route('/deliver/seft', methods=['POST'])
+@app.post('/deliver/seft')
 def deliver_seft():
     """
     Endpoint for delivering SEFT submissions. POST request requires the encrypted SEFT to be uploaded as
@@ -121,7 +121,7 @@ def deliver_seft():
     return process(meta, data_bytes)
 
 
-@app.route('/healthcheck', methods=['GET'])
+@app.get('/healthcheck')
 def healthcheck():
     return jsonify({'status': 'OK'})
 
