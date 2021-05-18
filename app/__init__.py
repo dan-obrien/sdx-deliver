@@ -3,7 +3,7 @@ import gnupg
 import structlog
 
 from google.cloud import pubsub_v1, storage
-from flask import Flask
+from fastapi import FastAPI
 from app.logger import logging_config
 from app.secret_manager import get_secret
 
@@ -57,5 +57,5 @@ def cloud_config():
     CONFIG.BUCKET = storage_client.bucket(CONFIG.BUCKET_NAME)
 
 
-app = Flask(__name__)
+app = FastAPI()
 from app import routes
