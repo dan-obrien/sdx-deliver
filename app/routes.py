@@ -1,9 +1,10 @@
 import json
 import threading
 import structlog
+from starlette.responses import HTMLResponse
 
 from structlog.contextvars import bind_contextvars
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, File, UploadFile
 from app import app
 from app.deliver import deliver
 from app.meta_wrapper import MetaWrapper
@@ -17,10 +18,23 @@ METADATA_FILE = 'metadata'
 SEFT_FILE = 'seft'
 
 
+@app.post('/deliver/legacy')
+async def deliver_legacy(transformed: UploadFile = File(...)):
+    print(transformed)
+    return {"filename": transformed.filename}
+
+
 @app.post('/deliver/dap')
 async def deliver_dap(request: Request):
-    print(request.path_params.get('filename'))
-    return {'status': 'success'}
+    """
+    Endpoint for submissions only intended for DAP. POST request requires the submission JSON to be uploaded
+    as "submission" and the filename passed in the query parameters.
+    """
+    filename = request.query_params.get('filename')
+    print(filename)
+    filename = request.query_params.items()
+    return {"client_host": filename}
+
 
 # @app.post('/deliver/dap')
 # def deliver_dap():

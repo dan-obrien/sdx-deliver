@@ -12,6 +12,7 @@ structlog = "==21.1.0"
 python-gnupg = "==0.4.7"
 gunicorn = "==20.1.0"
 Flask = "==2.0"
+python-multipart = "==0.0.5"
 
 [dev-packages]
 pytest = "==6.2.3"

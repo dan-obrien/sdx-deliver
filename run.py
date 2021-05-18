@@ -1,4 +1,5 @@
 import structlog
+import uvicorn
 from gunicorn.app.base import BaseApplication
 
 from app import app, cloud_config
@@ -27,8 +28,9 @@ class Server(BaseApplication):
 
 if __name__ == '__main__':
     logger.info('Starting SDX Deliver')
-    options = {
-        'bind': '%s:%s' % ('0.0.0.0', '5000'),
-        'workers': 2,
-    }
-    Server(app, options).run()
+    uvicorn.run(app, host="0.0.0.0", port=5003)
+    # options = {
+    #     'bind': '%s:%s' % ('0.0.0.0', '5003'),
+    #     'workers': 2,
+    # }
+    # Server(app, options).run()
