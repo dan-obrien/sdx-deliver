@@ -19,7 +19,7 @@ SEFT_FILE = 'seft'
 
 
 @app.post('/deliver/legacy')
-async def deliver_legacy(transformed: UploadFile = File(...)):
+async def deliver_legacy(filename: str, transformed: UploadFile = File(...)):
     print(transformed)
     return {"filename": transformed.filename}
 
