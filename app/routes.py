@@ -67,7 +67,7 @@ def deliver_hybrid():
     submission_bytes = files[SUBMISSION_FILE].read()
     survey_dict = json.loads(submission_bytes.decode())
     data_bytes = files[TRANSFORMED_FILE].read()
-    meta.set_legacy(survey_dict)
+    meta.set_hybrid(survey_dict)
     return process(meta, data_bytes)
 
 
