@@ -1,4 +1,5 @@
-FROM python:3.8-slim
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.8
+COPY ./app /app
 RUN apt-get update && apt-get install -y gnupg
 COPY . /app
 WORKDIR /app
