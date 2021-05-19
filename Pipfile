@@ -12,6 +12,7 @@ structlog = "==21.1.0"
 python-gnupg = "==0.4.7"
 uvicorn = "==0.13.4"
 python-multipart = "==0.0.5"
+fastapi = "0.63.0"
 
 [dev-packages]
 pytest = "==6.2.3"
